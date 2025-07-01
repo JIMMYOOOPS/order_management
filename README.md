@@ -1,4 +1,4 @@
-# Multi-Channel Order Management System多渠道訂單管理系統
+# Multi-Channel Order Management System
 
 The current project uses NestJS + TypeORM + PostgreSQL for a Multi-Channel Order Management System that supports docker for quick deployment.
 
@@ -64,3 +64,11 @@ Please refer to `.env.example` or docker-compose.yml setups：
 ## API Docs
 
 Enter [http://localhost:3000/api](http://localhost:3000/api) to review the API documentation.
+
+## Database Migrations
+
+To generate a new migration, run:
+
+```bash
+pnpm run typeorm:generate <migration-file-name>
+```
