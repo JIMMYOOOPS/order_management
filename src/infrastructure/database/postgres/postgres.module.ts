@@ -2,9 +2,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderEntity } from '../../domain/entities/order.entity';
-import { ShipmentEntity } from '../../domain/entities/shipment.entity';
-import { OrderItemEntity } from '../../domain/entities/order-item.entity';
+import { OrderEntity } from '../../../domain/entities/order.entity';
+import { ShipmentEntity } from '../../../domain/entities/shipment.entity';
+import { OrderItemEntity } from '../../../domain/entities/order-item.entity';
 
 @Module({
   imports: [

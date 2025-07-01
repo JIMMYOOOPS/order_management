@@ -19,8 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node --transpile-only ./node_modules/typeorm/cli.js",
-    "typeorm:generate": "pnpm typeorm migration:generate ./src/infrastructure/database/migration/ -d ./src/infrastructure/database/postgres-data-source.ts",
-    "typeorm:run": "pnpm typeorm migration:run -d ./src/infrastructure/database/postgres-data-source.ts"
+    "typeorm:generate": "pnpm typeorm migration:generate ./src/infrastructure/database/postgres/migration/$NAME -d ./src/infrastructure/database/postgres/postgres-data-source.ts",
+    "typeorm:run": "pnpm typeorm migration:run -d ./src/infrastructure/database/postgres/postgres-data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

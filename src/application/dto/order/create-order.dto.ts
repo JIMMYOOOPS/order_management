@@ -6,13 +6,11 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateShipmentDto } from '../shipment/create-shipment.dto';
+import { EOrderChannel } from 'src/domain/enums/order/order.enum';
 
 export class CreateOrderDto {
   @IsString()
-  channel: string;
-
-  @IsString()
-  orderNumber: string;
+  channel: EOrderChannel;
 
   @IsString()
   customerName: string;
@@ -22,9 +20,6 @@ export class CreateOrderDto {
 
   @IsDateString()
   orderDate: string;
-
-  @IsDateString()
-  deliveryDate?: string;
 
   @ValidateNested({ each: true })
   @Type(() => CreateShipmentDto)

@@ -1,8 +1,8 @@
 import 'dotenv/config'; // This loads .env automatically
 import { DataSource } from 'typeorm';
-import { OrderEntity } from '../../domain/entities/order.entity';
-import { ShipmentEntity } from '../../domain/entities/shipment.entity';
-import { OrderItemEntity } from '../../domain/entities/order-item.entity';
+import { OrderEntity } from '../../../domain/entities/order.entity';
+import { ShipmentEntity } from '../../../domain/entities/shipment.entity';
+import { OrderItemEntity } from '../../../domain/entities/order-item.entity';
 
 export default new DataSource({
   type: 'postgres',

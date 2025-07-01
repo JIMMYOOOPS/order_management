@@ -1,36 +1,42 @@
+import { UpdateOrderDto } from 'src/application/dto/order/update-order.dto';
 import { CreateOrderDto } from '../../application/dto/order/create-order.dto';
-import { OrderEntity } from '../../domain/entities/order.entity';
-import { ShipmentEntity } from '../../domain/entities/shipment.entity';
-import { OrderItemEntity } from '../../domain/entities/order-item.entity';
+import { OrderModel } from '../../domain/models/order/order.model';
 
 export class OrderMapper {
-  static toEntity(dto: CreateOrderDto): OrderEntity {
-    const order = new OrderEntity();
-    order.channel = dto.channel;
-    order.orderNumber = dto.orderNumber;
-    order.customerName = dto.customerName;
-    order.customerEmail = dto.customerEmail;
-    order.orderDate = new Date(dto.orderDate);
-    order.shipments =
-      dto.shipments?.map((shipmentDto) => {
-        const shipment = new ShipmentEntity();
-        shipment.shipmentNumber = shipmentDto.shipmentNumber;
-        shipment.shippingAddress = shipmentDto.shippingAddress;
-        shipment.deliveryDate = shipmentDto.deliveryDate
-          ? new Date(shipmentDto.deliveryDate)
-          : undefined;
-        shipment.status = shipmentDto.status;
-        shipment.items =
-          shipmentDto.items?.map((itemDto) => {
-            const item = new OrderItemEntity();
-            item.sku = itemDto.sku;
-            item.name = itemDto.name;
-            item.quantity = itemDto.quantity;
-            item.price = itemDto.price;
-            return item;
-          }) || [];
-        return shipment;
-      }) || [];
-    return order;
+  static toModel(dto: CreateOrderDto): OrderModel {
+    return {
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      channel: dto.channel,
+      customerName: dto.customerName,
+      customerEmail: dto.customerEmail,
+      orderDate: new Date(dto.orderDate),
+      shipments: dto.shipments.map((shipment) => ({
+        shippingAddress: shipment.shippingAddress,
+        deliveryDate: shipment.deliveryDate
+          ? new Date(shipment.deliveryDate)
+          : undefined,
+        items: shipment.items.map((item) => ({
+          sku: item.sku,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      })),
+    };
+  }
+
+  static toPartialModel(dto: UpdateOrderDto): Partial<OrderModel> {
+    return {
+      customerName: dto.customerName,
+      customerEmail: dto.customerEmail,
+      shipments: dto.shipments?.map((shipment) => ({
+        shippingAddress: shipment.shippingAddress,
+        deliveryDate: shipment.deliveryDate
+          ? new Date(shipment.deliveryDate)
+          : undefined,
+        items: undefined, // Items are not updated in this DTO
+      })),
+    };
   }
 }

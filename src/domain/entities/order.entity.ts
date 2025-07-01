@@ -7,17 +7,28 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ShipmentEntity } from './shipment.entity';
+import { EOrderStatus, EOrderChannel } from '../enums/order/order.enum';
 
 @Entity('orders')
 export class OrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  channel: string;
+  @Column({
+    type: 'enum',
+    enum: EOrderChannel,
+  })
+  channel: EOrderChannel;
 
   @Column()
   orderNumber: string;
+
+  @Column({
+    type: 'enum',
+    enum: EOrderStatus,
+    default: EOrderStatus.PENDING,
+  })
+  status: EOrderStatus;
 
   @Column()
   customerName: string;

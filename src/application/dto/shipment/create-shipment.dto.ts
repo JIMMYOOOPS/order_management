@@ -9,13 +9,7 @@ import { CreateOrderItemDto } from '../order-item/create-order-item.dto';
 
 export class CreateShipmentDto {
   @IsString()
-  shipmentNumber: string;
-
-  @IsString()
   shippingAddress: string;
-
-  @IsString()
-  status: string;
 
   @IsOptional()
   @IsDateString()

@@ -70,5 +70,5 @@ Enter [http://localhost:3000/api](http://localhost:3000/api) to review the API d
 To generate a new migration, run:
 
 ```bash
-pnpm run typeorm:generate <migration-file-name>
+NAME=<migration file name> pnpm run typeorm:generate
 ```

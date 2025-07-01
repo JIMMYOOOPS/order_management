@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { OrderEntity } from './order.entity';
 import { OrderItemEntity } from './order-item.entity';
+import { EShipmentStatus } from '../enums/shipment.enum.ts/shipment.enum';
 
 @Entity('shipments')
 export class ShipmentEntity {
@@ -24,8 +25,12 @@ export class ShipmentEntity {
   @Column()
   shippingAddress: string;
 
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: EShipmentStatus,
+    default: EShipmentStatus.PENDING,
+  })
+  status: EShipmentStatus;
 
   @Column({ nullable: true })
   deliveryDate?: Date;
