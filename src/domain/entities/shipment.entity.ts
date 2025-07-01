@@ -27,6 +27,9 @@ export class ShipmentEntity {
   @Column()
   status: string;
 
+  @Column({ nullable: true })
+  deliveryDate?: Date;
+
   @OneToMany(() => OrderItemEntity, (item) => item.shipment, { cascade: true })
   items: OrderItemEntity[];
 

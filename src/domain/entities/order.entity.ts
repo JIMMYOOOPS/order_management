@@ -28,9 +28,6 @@ export class OrderEntity {
   @Column()
   orderDate: Date;
 
-  @Column({ nullable: true })
-  deliveryDate?: Date;
-
   @OneToMany(() => ShipmentEntity, (shipment) => shipment.order, {
     cascade: true,
   })
