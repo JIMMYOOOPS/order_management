@@ -14,8 +14,32 @@ The current project uses NestJS + TypeORM + PostgreSQL for a Multi-Channel Order
 
 ```
 src/
-├── infrastructure/
-└── main.ts
+├── application/                # Application layer: DTOs, controllers, and modules (API entry, validation, orchestration)
+│   ├── dto/                    # Data Transfer Objects for validation and API contracts
+│   └── module/                 # Application modules and controllers
+├── common/                     # Shared utilities, constants, and configs
+│   ├── configs/                # Global configuration files
+│   ├── constants/              # Project-wide constants (e.g., pagination defaults)
+│   └── utils/                  # Utility functions (e.g., pagination, filtering)
+├── domain/                     # Domain layer: business logic, entities, enums, and models
+│   ├── entities/               # TypeORM entities (database models)
+│   ├── enums/                  # Domain enums (e.g., order status, channel)
+│   ├── models/                 # Domain models (business objects)
+│   └── services/               # Domain service interfaces (business rules abstraction)
+├── infrastructure/             # Infrastructure layer: database, mappers, external integrations
+│   ├── database/
+│   │   └── postgres/
+│   │       ├── migration/      # TypeORM migration files
+│   │       └── repositories/   # Database repositories (data access logic)
+│   └── mappers/                # DTO <-> Model <-> Entity mapping logic
+└── main.ts                     # Application entry point (NestJS bootstrap)
+.env                            # Environment variables
+.env.example                    # Example env file
+docker-compose.yml              # Docker Compose config
+Dockerfile                      # Docker build config
+package.json                    # Project manifest
+pnpm-lock.yaml                  # pnpm lock file
+README.md                       # Project documentation
 ```
 
 ## Quick Start
@@ -29,15 +53,18 @@ git clone https://github.com/JIMMYOOOPS/order_management.git
 cd order_management
 ```
 
-### 2. Init Docker Environment
+### 2. Init The Project
+
+#### Environment Variables
+
+1. Create a `.env.dev` and `.env.prod` file in the `./env/` directory of the project. Use soft links to create the env file to the root directory. For the parameters you can copy from `.env.example`:
 
 ```bash
-docker-compose up --build
+rm .env
+ln -s ./env/env.dev .env
 ```
 
-- PostgreSQL runs on by default [http://localhost:5432](http://localhost:5432)
-
-### 3. Local Development
+#### Local Development
 
 1. The projects uses pnpm for package management, please install pnpm first:
 
@@ -51,15 +78,33 @@ pnpm install -g pnpm
 pnpm install
 ```
 
-3. Start the development server
+- PostgreSQL runs on by default [http://localhost:5432](http://localhost:5432)
+
+3. Init the Project under Development Mode
+
+   In Development mode, we run a single database and connect with a local app. To build and run the application in development mode, use the following command:
+
+   Note: remove the `.env` file and create a soft link to the `./env/env.dev` file:
 
 ```bash
+rm .env
+ln -s ./env/env.dev .env
+docker compose up
 pnpm run start:dev
 ```
 
-## Environment Variables
+#### Production Deployment
 
-Please refer to `.env.example` or docker-compose.yml setups：
+In Production mode, we run a single database and connect with a local app. To build and run the application in production mode, use the following command:
+
+```bash
+rm .env
+ln -s ./env/env.prod .env
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+pnpm run start:prod
+```
+
+Note: remove the `.env` file and create a soft link to the `./env/env.prod` file:
 
 ## API Docs
 
@@ -71,4 +116,5 @@ To generate a new migration, run:
 
 ```bash
 NAME=<migration file name> pnpm run typeorm:generate
+pnpm typeorm:run
 ```
