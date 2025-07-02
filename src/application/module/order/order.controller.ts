@@ -13,7 +13,13 @@ import { UpdateOrderDto } from '../../dto/order/update-order.dto';
 import { OrderQueryDto } from '../../dto/order/order-query.dto';
 import { OrderService } from './order.service';
 import { OrderMapper } from '../../../infrastructure/mappers/order.mapper';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+} from '@nestjs/swagger';
 import { OrderEntity } from 'src/domain/entities/order.entity';
 import { EOrderChannel, EOrderStatus } from 'src/domain/enums/order/order.enum';
 import { OrderListResponseDto } from '../../dto/order/get-order.dto';
@@ -63,6 +69,22 @@ export class OrderController {
     return this.orderService.create(orderModel);
   }
 
+  @ApiOperation({
+    summary: 'Create an order by channel',
+    description:
+      'This endpoint allows you to create an order based on the specified channel.',
+  })
+  @ApiParam({
+    name: 'channel',
+    description:
+      'The channel through which the order is created (e.g., Amazon, HKTVMall, Momo)',
+    enum: EOrderChannel,
+  })
+  @ApiResponse({
+    status: 201,
+    type: OrderEntity,
+    description: 'The order has been successfully created by channel.',
+  })
   @Post(':channel')
   async createByChannel(
     @Param('channel') channel: EOrderChannel,
