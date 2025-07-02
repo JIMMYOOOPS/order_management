@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderEntity } from 'src/domain/entities/order.entity';
 import { OrderModel } from 'src/domain/models/order/order.model';
+import { OrderQueryDto } from 'src/application/dto/order/order-query.dto';
+import { buildOrderFilter } from 'src/infrastructure/database/postgres/utils/order-query.util';
+import { getPagination, PaginatedList } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class OrderRepository {
@@ -36,17 +39,18 @@ export class OrderRepository {
     return order || null;
   }
 
-  async findList(pagination: { page: number; limit: number }): Promise<{
-    items: OrderEntity[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
+  async findList(
+    pagination: { page: number; limit: number },
+    query: OrderQueryDto,
+  ): Promise<PaginatedList<OrderEntity>> {
     const { page, limit } = pagination;
-    // implement pagination logic whilst running the query
+    const { skip, take } = getPagination(page, limit);
+    const where = buildOrderFilter(query);
+    // Apply filters based on the query parameters
     const [items, total] = await this.orderRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+      skip,
+      take,
+      where,
       relations: ['shipments', 'shipments.items'],
       order: { createdAt: 'DESC' }, // optional: order by createdAt desc
     });
@@ -66,9 +70,12 @@ export class OrderRepository {
       throw new Error('Order not found');
     }
     // Update the order with the provided parameters
-    Object.assign(order, params);
+    const formattedOrder = {
+      ...order,
+      ...params,
+    };
     // Save the updated order back to the database
-    const updatedOrder = await this.orderRepository.save(order);
+    const updatedOrder = await this.orderRepository.save(formattedOrder);
     // Return the updated order with its relations loaded
     return this.orderRepository.findOne({
       where: { id: updatedOrder.id },

@@ -5,8 +5,6 @@ import { OrderModel } from '../../domain/models/order/order.model';
 export class OrderMapper {
   static toModel(dto: CreateOrderDto): OrderModel {
     return {
-      createdAt: new Date(),
-      updatedAt: new Date(),
       channel: dto.channel,
       customerName: dto.customerName,
       customerEmail: dto.customerEmail,
@@ -16,6 +14,7 @@ export class OrderMapper {
         deliveryDate: shipment.deliveryDate
           ? new Date(shipment.deliveryDate)
           : undefined,
+        type: shipment.type,
         items: shipment.items.map((item) => ({
           sku: item.sku,
           name: item.name,
@@ -35,6 +34,7 @@ export class OrderMapper {
         deliveryDate: shipment.deliveryDate
           ? new Date(shipment.deliveryDate)
           : undefined,
+        type: shipment.type,
         items: undefined, // Items are not updated in this DTO
       })),
     };

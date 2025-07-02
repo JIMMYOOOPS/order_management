@@ -1,41 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { OrderModel } from '../../../domain/models/order/order.model';
-import { OrderChannelFactory } from './channel-handlers/order-channel.factory';
+import { OrderChannelHandlerFactory } from './channel-handlers/order-channel.handler-factory';
 import { OrderRepository } from '../../../infrastructure/database/postgres/repositories/order.repository';
 import { OrderEntity } from '../../../domain/entities/order.entity';
+import { OrderQueryDto } from '../../dto/order/order-query.dto';
+import { PaginatedList } from '../../../common/utils/pagination.util';
+import { OrderChannelAdapterFactory } from './channel-adapters/order-channel.adapter-factory';
+import { EOrderChannel } from 'src/domain/enums/order/order.enum';
 
 @Injectable()
 export class OrderService {
   constructor(private readonly orderRepository: OrderRepository) {}
 
   async create(orderModel: OrderModel): Promise<OrderEntity> {
-    // Use the OrderChannelHandler to handle order creation logic by channel
-    const handler = OrderChannelFactory.getHandler(orderModel.channel);
+    const handler = OrderChannelHandlerFactory.getHandler(orderModel.channel);
     const orderEntity = handler.handle(orderModel);
-    // Save the order entity using the repository
     const orderResponse = await this.orderRepository.create(orderEntity);
     return orderResponse;
   }
 
+  async createByChannel(
+    rawDto: any,
+    channel: EOrderChannel,
+  ): Promise<OrderEntity> {
+    // Get the appropriate adapter for the channel
+    const adapter = OrderChannelAdapterFactory.getAdapter(channel);
+    // Convert the rawDto to an OrderModel
+    const orderModel = adapter.transform(rawDto);
+    // TODO: Save the rawDto for future reference if needed
+    // Create the order using the service
+    return this.create(orderModel);
+  }
+
   async findById(id: string): Promise<OrderEntity> {
-    // Find an order by its ID using the repository
     return this.orderRepository.findById(id);
   }
 
-  async findList(pagination: { page: number; limit: number }): Promise<{
-    items: OrderEntity[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
-    // Find all orders with pagination
+  async findList(
+    pagination: { page: number; limit: number },
+    query: OrderQueryDto,
+  ): Promise<PaginatedList<OrderEntity>> {
     const { page, limit } = pagination;
-    const response = await this.orderRepository.findList({
-      page,
-      limit,
-    });
-
-    // Return paginated response
+    const response = await this.orderRepository.findList(
+      {
+        page,
+        limit,
+      },
+      query,
+    );
     return response;
   }
 

@@ -4,7 +4,8 @@ import { AmazonHandler } from './amazon.handler';
 import { MomoHandler } from './momo.handler';
 import { HKTVMallHandler } from './hktvmall.handler';
 
-export class OrderChannelFactory {
+// OrderChannelFactory is responsible for creating the appropriate handler based on the order channel
+export class OrderChannelHandlerFactory {
   static getHandler(channel: string): OrderChannelHandler {
     switch (channel) {
       case EOrderChannel.AMAZON:

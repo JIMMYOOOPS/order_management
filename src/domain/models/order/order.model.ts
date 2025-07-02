@@ -2,6 +2,7 @@
 import { EOrderChannel, EOrderStatus } from '../../enums/order/order.enum';
 import { ShipmentModel } from './shipment.model';
 
+// This model represents the Order entity in the domain layer
 export interface OrderModel {
   channel: EOrderChannel;
   orderNumber?: string;
@@ -10,6 +11,4 @@ export interface OrderModel {
   customerEmail: string;
   orderDate: Date;
   shipments: ShipmentModel[];
-  createdAt: Date;
-  updatedAt: Date;
 }

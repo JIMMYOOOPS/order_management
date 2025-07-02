@@ -7,7 +7,7 @@ import {
 } from '../../../../domain/enums/order/order.enum';
 import { ShipmentEntity } from '../../../../domain/entities/shipment.entity';
 import { OrderItemEntity } from '../../../../domain/entities/order-item.entity';
-import { EShipmentStatus } from 'src/domain/enums/shipment.enum.ts/shipment.enum';
+import { EShipmentStatus } from 'src/domain/enums/shipment/shipment.enum';
 
 export class AmazonHandler implements OrderChannelHandler {
   handle(model: OrderModel): OrderEntity {
@@ -28,6 +28,7 @@ export class AmazonHandler implements OrderChannelHandler {
       const shipmentEntity = new ShipmentEntity();
       shipmentEntity.shipmentNumber = shipmentNumber;
       shipmentEntity.shippingAddress = shipment.shippingAddress;
+      shipmentEntity.type = shipment.type; // Assuming type is part of the model
       shipmentEntity.deliveryDate = shipment.deliveryDate
         ? new Date(shipment.deliveryDate)
         : undefined;

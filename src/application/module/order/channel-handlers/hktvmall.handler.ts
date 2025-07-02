@@ -7,7 +7,7 @@ import {
 } from '../../../../domain/enums/order/order.enum';
 import { ShipmentEntity } from '../../../../domain/entities/shipment.entity';
 import { OrderItemEntity } from '../../../../domain/entities/order-item.entity';
-import { EShipmentStatus } from 'src/domain/enums/shipment.enum.ts/shipment.enum';
+import { EShipmentStatus } from 'src/domain/enums/shipment/shipment.enum';
 
 export class HKTVMallHandler implements OrderChannelHandler {
   handle(model: OrderModel): OrderEntity {
