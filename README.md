@@ -125,6 +125,18 @@ NAME=<migration file name> pnpm run typeorm:generate
 pnpm typeorm:run
 ```
 
+## Project Design
+
+### Domain-Driven Design (DDD)
+
+The project follows Domain-Driven Design principles, separating the application into distinct layers:
+
+### Design Patterns
+
+- **Multi-Channel Order - Adapter Pattern**: The system supports multiple input channels (e.g., Momo, HKTVMall, Amazon) using an adapter pattern to handle different input formats and protocols.
+- **Multi-Channel Order - Factory + Strategy Pattern**: The order creation process uses a Factory pattern to create different order types based on the input channel, and a Strategy pattern to handle different payment methods (e.g., Momo, HKTVMall, Amazon).
+- **Order Life Cycle - State Pattern**: The order processing uses the State pattern to manage different order states (e.g., PENDING, PROCESSING, COMPLETED) and their transitions.
+
 ## TODO List
 
 - [ ] Create seeding script to populate the database with initial data.
