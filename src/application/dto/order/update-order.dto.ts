@@ -1,14 +1,25 @@
-import { IsString, ValidateNested, IsEmail } from 'class-validator';
+import { IsString, ValidateNested, IsEmail, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 import { UpdateShipmentDto } from '../shipment/update-shipment.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { EOrderStatus } from 'src/domain/enums/order/order.enum';
 
 export class UpdateOrderDto {
+  @ApiPropertyOptional({
+    description: 'The order status according to EOrderStatus',
+    type: String,
+    required: true,
+  })
+  @IsOptional()
+  @IsString()
+  status: EOrderStatus;
+
   @ApiPropertyOptional({
     description: 'The name of the customer placing the order',
     type: String,
     required: true,
   })
+  @IsOptional()
   @IsString()
   customerName: string;
 
@@ -17,6 +28,7 @@ export class UpdateOrderDto {
     type: String,
     required: true,
   })
+  @IsOptional()
   @IsEmail()
   customerEmail: string;
 
@@ -35,5 +47,6 @@ export class UpdateOrderDto {
   })
   @ValidateNested({ each: true })
   @Type(() => UpdateShipmentDto)
+  @IsOptional()
   shipments: UpdateShipmentDto[];
 }

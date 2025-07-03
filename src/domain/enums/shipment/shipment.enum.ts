@@ -1,14 +1,14 @@
 enum EShipmentStatus {
-  PENDING = 'PENDING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  RETURN = 'RETURN',
+  PENDING = 'pending',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  RETURN = 'return',
 }
 
 enum EShipmentType {
-  STANDARD = 'STANDARD',
-  EXPRESS = 'EXPRESS',
-  OVERNIGHT = 'OVERNIGHT',
+  STANDARD = 'standard',
+  EXPRESS = 'express',
+  OVERNIGHT = 'overnight',
 }
 
 export { EShipmentStatus, EShipmentType };

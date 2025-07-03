@@ -30,8 +30,6 @@ export class OrderRepository {
   }
 
   async findById(id: string): Promise<OrderEntity | null> {
-    // Get shipment and order items eagerly loaded
-    // This assumes that the OrderEntity has relations defined for shipments and items
     const order = await this.orderRepository.findOne({
       where: { id },
       relations: ['shipments', 'shipments.items'],
@@ -63,22 +61,12 @@ export class OrderRepository {
     };
   }
 
-  async update(id: string, params: Partial<OrderModel>): Promise<OrderEntity> {
-    // Find the order by ID
-    const order = await this.orderRepository.findOne({ where: { id } });
-    if (!order) {
-      throw new Error('Order not found');
-    }
-    // Update the order with the provided parameters
-    const formattedOrder = {
-      ...order,
-      ...params,
-    };
+  async update(updatedOrder: OrderEntity): Promise<OrderEntity> {
     // Save the updated order back to the database
-    const updatedOrder = await this.orderRepository.save(formattedOrder);
+    const response = await this.orderRepository.save(updatedOrder);
     // Return the updated order with its relations loaded
     return this.orderRepository.findOne({
-      where: { id: updatedOrder.id },
+      where: { id: response.id },
       relations: ['shipments', 'shipments.items'],
     });
   }

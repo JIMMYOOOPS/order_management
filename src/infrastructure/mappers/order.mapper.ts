@@ -27,6 +27,7 @@ export class OrderMapper {
 
   static toPartialModel(dto: UpdateOrderDto): Partial<OrderModel> {
     return {
+      status: dto.status,
       customerName: dto.customerName,
       customerEmail: dto.customerEmail,
       shipments: dto.shipments?.map((shipment) => ({
