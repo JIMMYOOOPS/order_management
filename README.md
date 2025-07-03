@@ -85,6 +85,7 @@ pnpm install
    In Development mode, we run a single database and connect with a local app. To build and run the application in development mode, use the following command:
 
    Note: remove the `.env` file and create a soft link to the `./env/env.dev` file:
+   Note: the POSTGRES_HOST should be set to `localhost` in the `.env.dev` file.
 
 ```bash
 rm .env
@@ -95,22 +96,27 @@ pnpm run start:dev
 
 #### Production Deployment
 
-In Production mode, we run a single database and connect with a local app. To build and run the application in production mode, use the following command:
+In Production mode, we run a database and app in containers. The image is obtained via Docker Hub by Docker Compose. To build and run the application in production mode, use the following command:
+
+Note: Remember to remove the `.env` file and create a soft link to the `./env/env.prod` file:
+NOte : the POSTGRES_HOST should be set to `order_management_postgres` in the `.env.prod` file.
 
 ```bash
 rm .env
 ln -s ./env/env.prod .env
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+docker compose -f docker-compose.prod.yml up --build
 pnpm run start:prod
 ```
-
-Note: remove the `.env` file and create a soft link to the `./env/env.prod` file:
 
 ## API Docs
 
 Enter [http://localhost:3000/api](http://localhost:3000/api) to review the API documentation.
 
-## Database Migrations
+## Database Migrations and Seeding
+
+### Migrations
+
+To manage database migrations, we use TypeORM. The migration files are located in the `src/infrastructure/database/postgres/migration` directory.
 
 To generate a new migration, run:
 
@@ -118,3 +124,11 @@ To generate a new migration, run:
 NAME=<migration file name> pnpm run typeorm:generate
 pnpm typeorm:run
 ```
+
+## TODO List
+
+- [ ] Create seeding script to populate the database with initial data.
+- [ ] Create Product entity for OrderItems. (The Order currently directly creates OrderItems with product details, but it should reference a Product entity.)
+- [ ] The Orders should have status update functionality that allows managing the order lifecycle (This should emit events that manage shipment, inventory and notification).
+- [ ] Add error handling and logging.
+- [ ] Add unit integration tests for application robustness.
